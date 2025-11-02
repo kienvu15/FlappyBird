@@ -29,7 +29,9 @@ public class FlappyBirdController : MonoBehaviour {
 
         // reset score
         Score = 0;
-        ScoreText.text = "SCORE: " + Score.ToString();
+        if (ScoreManager.Instance != null)
+            ScoreManager.Instance.SetScore(Score);
+
 
         // reset pipes
         PipeCount = 0;
@@ -97,10 +99,13 @@ public class FlappyBirdController : MonoBehaviour {
             // when pipe has passed the bird
             if (pipe.position.x < 0) {
                 int pipeId = int.Parse(pipe.name);
-                if (pipeId > Score) {
+                if (pipeId > Score)
+                {
                     Score = pipeId;
-                    ScoreText.text = "SCORE: " + Score.ToString();
+                    if (ScoreManager.Instance != null)
+                        ScoreManager.Instance.SetScore(Score);
                 }
+
             }
 
             // when pipe is offscreen
@@ -110,9 +115,12 @@ public class FlappyBirdController : MonoBehaviour {
         }
     }
 
-    private void OnTriggerEnter(Collider collider) {
+    private void OnTriggerEnter(Collider collider)
+    {
+        if (ScoreManager.Instance != null)
+            ScoreManager.Instance.SaveHighScore();
 
-        // STEP 3 - Collision
-        Start();
+        Start(); // reset game
     }
+
 }
